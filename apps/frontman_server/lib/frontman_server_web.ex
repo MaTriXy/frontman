@@ -17,7 +17,11 @@ defmodule FrontmanServerWeb do
   those modules here.
   """
 
-  def static_paths, do: ~w(assets fonts images favicon.ico robots.txt browser-test)
+  @env Mix.env()
+  def static_paths do
+    base = ~w(assets fonts images favicon.ico robots.txt)
+    if @env == :prod, do: base, else: base ++ ["browser-test"]
+  end
 
   def router do
     quote do

@@ -72,19 +72,13 @@ jobs:
         if: always()
         run: rm -f ~/.ssh/deploy_key
 
-      - name: Cleanup Docker artifacts
-        if: always()
-        run: |
-          # Remove any leftover build images (frontman-builder, etc.)
-          docker images --filter "reference=frontman-*" -q | xargs -r docker rmi -f 2>/dev/null || true
-          # Prune BuildKit cache
-          docker buildx prune -f 2>/dev/null || true
-
   # ==========================================================================
   # Client: build standalone bundle on CI → deploy to Cloudflare Pages
+  # Runs after server to avoid OOM on shared self-hosted runner
   # ==========================================================================
   deploy-client:
     name: Deploy Client
+    needs: deploy-server
     runs-on: self-hosted
     environment: production
     steps:

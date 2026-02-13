@@ -28,20 +28,12 @@ echo "Build dir: ${BUILD_DIR}"
 echo ""
 
 # =============================================================================
-# Phase 1: Build
+# Phase 1: Build (Elixir only — no JS/ReScript needed for server)
 # =============================================================================
-cd "${BUILD_DIR}"
-
-echo ">>> Installing JS dependencies..."
-yarn install --immutable
-
-echo ">>> Building ReScript..."
-yarn rescript clean && yarn rescript build
-
-echo ">>> Installing Elixir dependencies..."
 cd "${BUILD_DIR}/apps/frontman_server"
 export MIX_ENV=prod
 
+echo ">>> Installing Elixir dependencies..."
 mix local.hex --force --if-missing
 mix local.rebar --force --if-missing
 mix deps.get --only prod
@@ -59,7 +51,6 @@ mix compile
 echo ">>> Building assets..."
 mix tailwind frontman_server --minify
 mix esbuild frontman_server --minify
-mix esbuild browser_test --minify
 mix phx.digest
 
 echo ">>> Building release..."
