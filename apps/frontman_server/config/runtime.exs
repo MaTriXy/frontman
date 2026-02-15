@@ -138,6 +138,14 @@ if config_env() == :prod do
 
   config :frontman_server, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
 
+  # Allow WebSocket connections from the main site, subdomains, and localhost (for local dev)
+  check_origin =
+    case System.get_env("CHECK_ORIGIN") do
+      "false" -> false
+      origins when is_binary(origins) -> String.split(origins, ",", trim: true)
+      _ -> ["//frontman.sh", "//*.frontman.sh", "//localhost"]
+    end
+
   config :frontman_server, FrontmanServerWeb.Endpoint,
     url: [host: host, port: 443, scheme: "https"],
     http: [
@@ -148,6 +156,7 @@ if config_env() == :prod do
       ip: {0, 0, 0, 0, 0, 0, 0, 0},
       port: port
     ],
+    check_origin: check_origin,
     secret_key_base: secret_key_base
 
   # ## SSL Support
