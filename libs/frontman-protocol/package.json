@@ -37,7 +37,7 @@
 		"sury": "11.0.0-alpha.4"
 	},
 	"devDependencies": {
-		"@rescript/webapi": "catalog:",
+		"@rescript/webapi": "*",
 		"rescript": "catalog:"
 	}
 }

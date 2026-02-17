@@ -1,6 +1,5 @@
 ---
-"@frontman-ai/frontman-server": patch
-"@frontman-ai/client": patch
+"@frontman/client": patch
 ---
 
 ### Fixed
