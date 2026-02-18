@@ -96,10 +96,10 @@ import clientSvg from '../../../assets/context/client.svg'
 	}
 
 	.server-client-diagram {
-		@apply relative flex flex-col items-center justify-center md:flex-row md:items-end;
+		@apply relative flex flex-row items-end justify-center;
 		width: 100%;
 		max-width: 600px;
-		gap: 4rem;
+		gap: 1.5rem;
 	}
 
 	@media (min-width: 768px) {
@@ -109,37 +109,32 @@ import clientSvg from '../../../assets/context/client.svg'
 	}
 
 	.diagram-item {
-		@apply relative flex flex-col items-center gap-3;
+		@apply relative flex flex-col items-center;
+		flex: 1;
+		min-width: 0;
 	}
 
+	/* Logo sits in-flow above the illustration, overlapping it with negative margin */
 	.diagram-logo {
-		@apply absolute;
-		width: 64px;
-		height: 64px;
-		top: -16px;
-		left: 50%;
-		transform: translate(-50%, -50%);
+		width: 48px;
+		height: 48px;
+		margin-bottom: -24px;
 		z-index: 40;
+		position: relative;
 		filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
 	}
 
 	@media (min-width: 768px) {
 		.diagram-logo {
-			width: 100px;
-			height: 100px;
-			top: -20px;
+			width: 80px;
+			height: 80px;
+			margin-bottom: -40px;
 		}
 	}
 
 	.illustration-wrapper {
-		@apply relative;
-		max-width: 180px;
-	}
-
-	@media (min-width: 768px) {
-		.illustration-wrapper {
-			max-width: 220px;
-		}
+		@apply relative overflow-hidden;
+		width: 100%;
 	}
 
 	.illustration-image {
@@ -171,7 +166,7 @@ import clientSvg from '../../../assets/context/client.svg'
 	}
 
 	.diagram-label {
-		@apply font-headings text-xl font-bold text-white;
+		@apply font-headings text-xl font-bold text-white mt-3;
 	}
 
 	/* Content Side */
@@ -229,18 +224,11 @@ import clientSvg from '../../../assets/context/client.svg'
 
 		.server-client-diagram {
 			max-width: 100%;
-		}
-
-		.diagram-item {
-			gap: 0.5rem;
-		}
-
-		.illustration-wrapper {
-			max-width: 150px;
+			gap: 1rem;
 		}
 
 		.diagram-label {
-			@apply text-base;
+			@apply text-sm;
 		}
 
 		.context-title {
