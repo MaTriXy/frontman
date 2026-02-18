@@ -356,7 +356,7 @@ module ModelSelector = {
         }
       }}>
       <Select.Trigger
-        className="inline-flex items-center justify-between gap-1 h-7 pl-2 pr-1 text-xs
+        className="inline-flex items-center justify-between gap-1 w-full h-7 pl-2 pr-1 text-xs
                    bg-transparent text-zinc-400 
                    border-none rounded cursor-pointer
                    hover:text-zinc-200 hover:bg-zinc-700/30
@@ -493,6 +493,7 @@ let make = (
   ~onSubmit: (~text: string, ~inputItems: array<inputItem>) => unit,
   ~onCancel: unit => unit,
   ~providers: array<StateTypes.providerConfig>,
+  ~isModelsConfigLoading: bool,
   ~selectedModel: option<StateTypes.selectedModel>,
   ~onModelChange: (~provider: string, ~value: string) => unit,
   ~isAgentRunning: bool,
@@ -847,7 +848,7 @@ let make = (
           onInput={handleInput}
           onClick={handleEditableClick}
           className={[
-            "w-full min-h-[44px] max-h-[200px] px-4 py-3",
+            "w-full min-h-[48px] max-h-[200px] px-4 py-3",
             "bg-[#8051CD]/20 border-2 border-[#8051CD]/60 rounded-xl",
             "text-sm text-zinc-100",
             "overflow-y-auto",
@@ -898,16 +899,33 @@ let make = (
           className="hidden"
         />
 
-        // Model selector - only show if we have providers
-        {Array.length(providers) > 0
-          ? <ModelSelector
+        // Model selector - show loading placeholder until providers are fetched
+        {switch (isModelsConfigLoading, Array.length(providers) > 0) {
+        | (true, _) =>
+          <div className="w-[150px] h-7">
+            <div
+              className="inline-flex items-center justify-between gap-1 w-full h-full pl-2 pr-1 text-xs
+                         bg-transparent text-zinc-500 border-none rounded cursor-default">
+              <span className="truncate max-w-[130px]">
+                {React.string("Loading models...")}
+              </span>
+              <span className="text-zinc-400">
+                <Icons.ChevronDownIcon size=12 />
+              </span>
+            </div>
+          </div>
+        | (false, true) =>
+          <div className="w-[150px] h-7">
+            <ModelSelector
               providers
               selectedValue={selectedModel
                 ->Option.map(m => `${m.provider}:${m.value}`)
                 ->Option.getOr("")}
               onModelChange
             />
-          : React.null}
+          </div>
+        | (false, false) => React.null
+        }}
       </div>
 
       // Button group: Select Element (optional) + Submit

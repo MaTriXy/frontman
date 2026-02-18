@@ -120,6 +120,7 @@ let make = (
   let hasAnyKey = hasProviderConfigured || hasEnvKey
 
   let providers = modelsConfig->Option.mapOr([], config => config.providers)
+  let isModelsConfigLoading = modelsConfig->Option.isNone
 
   let isUsageExhausted = switch (usageInfo, hasAnyKey) {
   | (Some({remaining: Some(remaining), hasServerKey: Some(true)}), false)
@@ -342,6 +343,7 @@ let make = (
       onSubmit={handleSubmit}
       onCancel={Client__State.Actions.cancelTurn}
       providers
+      isModelsConfigLoading
       selectedModel
       onModelChange={(~provider, ~value) =>
         Client__State.Actions.setSelectedModel(~provider, ~value)}
