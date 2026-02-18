@@ -323,7 +323,7 @@ module SuccessMessages = {
   ${p("│")}   Questions? Comments? Need support?          ${p("│")}
   ${p("│")}                                               ${p("│")}
   ${p("│")}       Join us on Discord:                     ${p("│")}
-  ${p("│")}       ${pd("https://discord.gg/J77jBzMM")}             ${p("│")}
+  ${p("│")}       ${pd("https://discord.gg/xk8uXJSvhC")}             ${p("│")}
   ${p("│")}                                               ${p("│")}
   ${p("└───────────────────────────────────────────────┘")}
 `

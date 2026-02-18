@@ -16,7 +16,7 @@ export const socialLinks: SocialLink[] = [
 	},
 	{
 		name: 'discord',
-		link: 'https://discord.gg/J77jBzMM',
+		link: 'https://discord.gg/xk8uXJSvhC',
 		icon: 'discord-icon'
 	},
 	{

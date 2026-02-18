@@ -84,7 +84,7 @@ export const footerNavigationData: FooterData = {
 			subCategories: [
 				{
 					subCategory: 'Discord',
-					subCategoryLink: 'https://discord.gg/J77jBzMM',
+					subCategoryLink: 'https://discord.gg/xk8uXJSvhC',
 					external: true
 				},
 				{

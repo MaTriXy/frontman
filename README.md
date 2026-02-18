@@ -10,6 +10,7 @@
   <a href="https://github.com/frontman-ai/frontman/actions"><img src="https://github.com/frontman-ai/frontman/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
   <a href="https://github.com/frontman-ai/frontman/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0%20%2F%20AGPL--3.0-blue" alt="License" /></a>
   <a href="https://www.npmjs.com/package/@frontman-ai/nextjs"><img src="https://img.shields.io/npm/v/@frontman-ai/nextjs" alt="npm version" /></a>
+  <a href="https://discord.gg/xk8uXJSvhC"><img src="https://img.shields.io/badge/Discord-Join%20Us-5865F2?logo=discord&logoColor=white" alt="Discord" /></a>
 </p>
 
 ---

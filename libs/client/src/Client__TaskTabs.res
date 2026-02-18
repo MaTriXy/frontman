@@ -186,7 +186,7 @@ let make = (
             className={headerIconBtn ++ " hover:text-[#5865F2] hover:bg-[#5865F2]/10"}
           >
             <a
-              href="https://discord.gg/J77jBzMM"
+              href="https://discord.gg/xk8uXJSvhC"
               target="_blank"
               rel="noopener noreferrer"
             >
