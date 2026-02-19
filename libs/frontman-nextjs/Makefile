@@ -1,11 +1,14 @@
 .DEFAULT_GOAL := help
-.PHONY: help build test test-watch test-coverage lint format clean
+.PHONY: help build test test-watch test-coverage lint format clean publish
 
 help: ## Display this help message
 	@awk 'BEGIN {FS = ":.*##"} /^[a-zA-Z_-]+:.*##/ { printf "  %-15s %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
 
-build: ## Build ReScript
-	yarn rescript build
+build: ## Build ReScript + bundle
+	yarn build
+
+publish: build ## Build and publish to npm (pass OTP=<code> for 2FA)
+	npm publish $(if $(OTP),--otp=$(OTP))
 
 test: build ## Run tests
 	yarn vitest run

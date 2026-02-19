@@ -28,7 +28,7 @@ endef
         ssl-setup tunnel \
         worktree-create worktree-create-from worktree-list worktree-remove worktree-clean \
         worktree-status worktree-devpod worktree-urls worktree-hosts worktree-register worktree-registry \
-        publish-astro release \
+        publish publish-astro publish-vite publish-nextjs release \
         kill-all-processes open-dogfooding pull-webapi
 
 help: ## Display available commands
@@ -313,8 +313,16 @@ worktree-registry: ## Show all registered worktrees on the server
 # ============================================================================
 ## REL_START
 
+publish: publish-astro publish-vite publish-nextjs ## Publish all npm packages (pass OTP=<code> for 2FA)
+
 publish-astro: ## Publish @frontman-ai/astro to npm (pass OTP=<code> for 2FA)
 	cd libs/frontman-astro && $(MAKE) publish OTP=$(OTP)
+
+publish-vite: ## Publish @frontman-ai/vite to npm (pass OTP=<code> for 2FA)
+	cd libs/frontman-vite && $(MAKE) publish OTP=$(OTP)
+
+publish-nextjs: ## Publish @frontman-ai/nextjs to npm (pass OTP=<code> for 2FA)
+	cd libs/frontman-nextjs && $(MAKE) publish OTP=$(OTP)
 
 release: ## Create a release PR from pending changesets
 	@printf "$(CYAN)Checking release prerequisites...$(RESET)\n"
