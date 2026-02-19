@@ -1,0 +1,63 @@
+name: Discord Deploy Notification
+description: Send deployment status notifications to Discord
+
+inputs:
+  status:
+    description: Job status (success, failure, cancelled)
+    required: true
+  component:
+    description: Deployed component name (Marketing, Server, Client)
+    required: true
+  webhook-url:
+    description: Discord webhook URL
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Send message
+      shell: bash
+      env:
+        STATUS: ${{ inputs.status }}
+        COMPONENT: ${{ inputs.component }}
+        DISCORD_WEBHOOK_URL: ${{ inputs.webhook-url }}
+      run: |
+        set -euo pipefail
+
+        if [ -z "${DISCORD_WEBHOOK_URL}" ]; then
+          echo "DISCORD_WEBHOOK_URL is empty. Skipping notification."
+          exit 0
+        fi
+
+        case "${STATUS}" in
+          success)
+            emoji=":white_check_mark:"
+            status_text="succeeded"
+            ;;
+          failure)
+            emoji=":x:"
+            status_text="failed"
+            ;;
+          cancelled)
+            emoji=":white_circle:"
+            status_text="was cancelled"
+            ;;
+          *)
+            emoji=":information_source:"
+            status_text="finished with status ${STATUS}"
+            ;;
+        esac
+
+        short_sha="${GITHUB_SHA::7}"
+        run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+
+        message="${emoji} **${COMPONENT} deployment ${status_text}**
+Repository: \`${GITHUB_REPOSITORY}\`
+Branch: \`${GITHUB_REF_NAME}\`
+Commit: \`${short_sha}\`
+Actor: \`${GITHUB_ACTOR}\`
+Run: ${run_url}"
+
+        curl -fsS -X POST \
+          -F "content=${message}" \
+          "${DISCORD_WEBHOOK_URL}"

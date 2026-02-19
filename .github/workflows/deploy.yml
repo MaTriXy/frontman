@@ -106,6 +106,15 @@ jobs:
         if: always()
         run: rm -f ~/.ssh/deploy_key
 
+      - name: Notify Discord
+        if: always()
+        continue-on-error: true
+        uses: ./.github/actions/discord-notify
+        with:
+          status: ${{ job.status }}
+          component: Server
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+
   # ==========================================================================
   # Client: build standalone bundle on CI → deploy to Cloudflare Pages
   # Runs after server to avoid OOM on shared self-hosted runner
@@ -155,3 +164,12 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy libs/client/dist --project-name=frontman-client --branch=main
+
+      - name: Notify Discord
+        if: always()
+        continue-on-error: true
+        uses: ./.github/actions/discord-notify
+        with:
+          status: ${{ job.status }}
+          component: Client
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}

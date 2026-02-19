@@ -56,3 +56,12 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy apps/marketing/dist --project-name=frontman-marketing --branch=main
+
+      - name: Notify Discord
+        if: always()
+        continue-on-error: true
+        uses: ./.github/actions/discord-notify
+        with:
+          status: ${{ job.status }}
+          component: Marketing
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
