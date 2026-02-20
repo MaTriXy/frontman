@@ -13,6 +13,15 @@ module Config = FrontmanAstro__Config
 module Middleware = FrontmanAstro__Middleware
 module ViteAdapter = FrontmanAstro__ViteAdapter
 
+// Vite plugin that wraps Astro's renderComponent to inject component props
+// as HTML comments. Imported as raw JS since it transforms Vite module internals.
+@module("./vite-plugin-props-injection.mjs")
+external frontmanPropsInjectionPlugin: unit => Bindings.vitePlugin = "frontmanPropsInjectionPlugin"
+
+// Browser-side annotation capture script (exported as a string for injectScript)
+@module("./annotation-capture.mjs")
+external annotationCaptureScript: string = "annotationCaptureScript"
+
 // SVG icon for the toolbar
 let icon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>`
 
@@ -25,44 +34,6 @@ let getToolbarAppPath = () => {
   let url = WebAPI.URL.make(~url="./toolbar.js", ~base=importMetaUrl)
   url.pathname
 }
-
-// Annotation capture script - injected via injectScript("head-inline")
-// Reads Astro's data-astro-source-file/loc attributes and stores them on window.
-//
-// Timing: Astro's dev toolbar strips data-astro-source-* attributes inside a
-// DOMContentLoaded handler registered by a <script type="module">. Our script is
-// an inline <script> in <head>, so it parses and registers its DOMContentLoaded
-// listener before the module script even starts loading. Since DOMContentLoaded
-// listeners fire in registration order, we capture annotations before the toolbar
-// strips them.
-//
-// Also re-captures on Astro View Transitions (SPA navigations) via astro:page-load.
-let annotationCaptureScript = `(function() {
-  function captureAnnotations() {
-    var annotations = new Map();
-    document.querySelectorAll('[data-astro-source-file]').forEach(function(el) {
-      annotations.set(el, {
-        file: el.getAttribute('data-astro-source-file'),
-        loc: el.getAttribute('data-astro-source-loc')
-      });
-    });
-    window.__frontman_annotations__ = {
-      _map: annotations,
-      get: function(el) { return annotations.get(el); },
-      has: function(el) { return annotations.has(el); },
-      size: function() { return annotations.size; }
-    };
-  }
-  // Capture once on initial DOM parse
-  document.addEventListener('DOMContentLoaded', captureAnnotations);
-  // Re-capture on View Transitions (SPA navigations) — skips the initial
-  // page-load event since DOMContentLoaded already captured
-  var initialLoad = true;
-  document.addEventListener('astro:page-load', function() {
-    if (initialLoad) { initialLoad = false; return; }
-    captureAnnotations();
-  });
-})();`
 
 // Create the Astro integration
 // Accepts the same config options as makeConfig (all optional)
@@ -87,6 +58,16 @@ let make = (configInput: Config.jsConfigInput): Bindings.astroIntegration => {
                 "Set `devToolbar: { enabled: true }` in your astro.config to enable full component source resolution.",
               )
             }
+
+            // Register Vite plugin that monkey-patches renderComponent to inject
+            // component props as HTML comments into the SSR output.
+            // This lets the client-side annotation capture script associate
+            // props with each component instance for AI agent context.
+            ctx.updateConfig({
+              vite: ?Some({
+                plugins: ?Some([frontmanPropsInjectionPlugin()]),
+              }),
+            })
 
             // Register the dev toolbar app
             ctx.addDevToolbarApp({
