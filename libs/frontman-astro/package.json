@@ -21,6 +21,10 @@
 		"devtools",
 		"dev-toolbar",
 		"ai",
+		"browser",
+		"visual-editing",
+		"developer-tools",
+		"frontend",
 		"development"
 	],
 	"type": "module",

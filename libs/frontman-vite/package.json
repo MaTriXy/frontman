@@ -21,6 +21,13 @@
 		"vite",
 		"vite-plugin",
 		"ai",
+		"react",
+		"vue",
+		"svelte",
+		"browser",
+		"visual-editing",
+		"developer-tools",
+		"frontend",
 		"development",
 		"middleware"
 	],
