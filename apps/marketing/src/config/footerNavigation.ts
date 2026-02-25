@@ -24,8 +24,14 @@ export interface FooterColumn {
 	subCategories: SubCategory[]
 }
 
+export interface SubFooterLink {
+	label: string
+	href: string
+}
+
 export interface SubFooter {
 	copywriteText: string
+	links: SubFooterLink[]
 }
 
 export interface FooterData {
@@ -121,6 +127,10 @@ export const footerNavigationData: FooterData = {
 		}
 	],
 	subFooter: {
-		copywriteText: `© ${new Date().getFullYear()} Frontman. All rights reserved.`
+		copywriteText: `© ${new Date().getFullYear()} Frontman. All rights reserved.`,
+		links: [
+			{ label: 'Terms of Service', href: '/terms' },
+			{ label: 'Privacy Policy', href: '/privacy' }
+		]
 	}
 }
