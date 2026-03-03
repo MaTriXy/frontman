@@ -39,7 +39,6 @@ export const navigationBarData: NavData = {
 	},
 	navItems: [
 		{ name: 'Home', link: '/' },
-		{ name: 'Blog', link: '/blog/' },
 		{
 			name: 'Compare',
 			link: '/vs/',
@@ -50,7 +49,17 @@ export const navigationBarData: NavData = {
 				{ name: 'vs v0', link: '/vs/v0/' }
 			]
 		},
+		{
+			name: 'Integrations',
+			link: '/integrations/',
+			submenu: [
+				{ name: 'Next.js', link: '/integrations/nextjs/' },
+				{ name: 'Astro', link: '/integrations/astro/' },
+				{ name: 'Vite', link: '/integrations/vite/' }
+			]
+		},
 		{ name: 'Changelog', link: '/changelog/' },
+		{ name: 'Blog', link: '/blog/' },
 		{ name: 'FAQ', link: '/faq/' }
 	],
 	navActions: [{ name: 'Try it now', link: '/#install', style: 'white', size: 'lg' }]
