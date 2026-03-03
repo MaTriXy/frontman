@@ -1,6 +1,6 @@
 ---
 mode: subagent
-model: anthropic/claude-haiku-4-20250506
+model: anthropic/claude-haiku-4-5-20251001
 hidden: true
 steps: 1
 temperature: 0
