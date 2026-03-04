@@ -574,10 +574,7 @@ pr-summary: ## Post AGD usage summary as a comment on the current branch's PR
 		printf "$(YELLOW)Error: no open PR found for branch '$$BRANCH'$(RESET)\n"; \
 		exit 1; \
 	fi; \
-	LOG_TMP=$$(mktemp); \
-	agd log --branch "$$BRANCH" --format json 2>/dev/null > "$$LOG_TMP" || true; \
-	BODY=$$(agd stats --branch "$$BRANCH" --format json 2>/dev/null | python3 $(AGD_RENDER_SUMMARY) --with-log "$$LOG_TMP"); \
-	rm -f "$$LOG_TMP"; \
+	BODY=$$(agd log --branch "$$BRANCH" --format json 2>/dev/null | python3 $(AGD_RENDER_SUMMARY)); \
 	if [ -z "$$BODY" ]; then \
 		printf "$(CYAN)No AGD traces found for branch '$$BRANCH'$(RESET)\n"; \
 		exit 0; \
